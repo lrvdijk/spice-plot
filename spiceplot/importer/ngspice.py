@@ -117,7 +117,8 @@ class Importer:
                     self.vectors[var_num].data[point_num] = self.parse_value(
                         values[0])
 
-        self.current_plot.vectors = self.vectors
+        self.current_plot.x_axis = self.vectors[0]
+        self.current_plot.vectors = self.vectors[1:]
 
     def read_binary(self, f):
         raise NotImplementedError

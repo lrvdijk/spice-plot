@@ -20,7 +20,7 @@ class PlotData:
         self.num_variables = 0
         self.num_points = 0
 
-        # First entry in this list is the x-axis
+        self.x_axis = None
         self.vectors = []
 
     def add_vector(self, vector):
