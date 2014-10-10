@@ -8,8 +8,6 @@
 .. moduleauthor:: Lucas van Dijk
 """
 
-import numpy as np
-
 class PlotData:
     """
         A plot is a collection of one or more data vectors, to be displayed
@@ -18,14 +16,19 @@ class PlotData:
 
     def __init__(self, title=""):
         self.title = title
-        self.x_axis = np.array([])
+        self.is_complex = False
+        self.num_variables = 0
+        self.num_points = 0
 
-        self.properties = {}
+        # First entry in this list is the x-axis
         self.vectors = []
 
-    def set_properties(self, **kwargs):
-        self.properties.update(kwargs)
+    def add_vector(self, vector):
+        self.vectors.append(vector)
 
-    def add_vector(self, data):
-        self.vectors.append(data)
-
+class Vector:
+    def __init__(self, data=None, name="", data_type="", is_complex=False):
+        self.data = data
+        self.name = name
+        self.data_type = data_type
+        self.is_complex = is_complex
