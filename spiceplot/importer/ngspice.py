@@ -36,8 +36,6 @@ class Importer:
                 parts = [part.strip() for part in line.split(b':', 1)]
                 attr = parts[0].lower()
 
-                print(parts)
-
                 possible_attrs = {
                     b'plotname': self.create_new_plot,
                     b'flags': lambda value: self.set_flags([flag.lower().strip()
@@ -102,12 +100,17 @@ class Importer:
             raise ValueError("No information about the number of variables or "
                 "points.")
 
-        for point_num in range(self.current_plot.num_points):
-            for var_num in range(self.current_plot.num_variables):
+        point_num = 0
+        while point_num < self.current_plot.num_points:
+            var_num = 0
+            while var_num < self.current_plot.num_variables:
                 line = f.readline()
 
                 values = line.split()
+                print(point_num, var_num)
+                print(values)
                 if not values:
+                    print("-Skip")
                     continue
 
                 if len(values) > 1:
@@ -117,8 +120,17 @@ class Importer:
                     self.vectors[var_num].data[point_num] = self.parse_value(
                         values[0])
 
+                var_num += 1
+
+            point_num += 1
+
+        print(self.vectors)
         self.current_plot.x_axis = self.vectors[0]
         self.current_plot.vectors = self.vectors[1:]
+
+        print(self.current_plot.x_axis.data)
+        #print(self.current_plot.vectors[0].data)
+        #print(self.current_plot.x_axis.data.size, self.current_plot.vectors[0].data.size)
 
     def read_binary(self, f):
         raise NotImplementedError
