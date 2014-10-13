@@ -37,7 +37,7 @@ class Importer:
                 attr = parts[0].lower()
 
                 possible_attrs = {
-                    b'plotname': self.create_new_plot,
+                    b'title': self.create_new_plot,
                     b'flags': lambda value: self.set_flags([flag.lower().strip()
                         for flag in value.split()]),
                     b'no. variables': self.set_num_variables,
@@ -60,7 +60,7 @@ class Importer:
         if self.current_plot:
             self.plots.append(self.current_plot)
 
-        self.current_plot = PlotData(title)
+        self.current_plot = PlotData(title.decode('utf-8'))
         self.vectors = []
 
     def set_flags(self, flags):
@@ -89,7 +89,8 @@ class Importer:
 
             self.vectors.append(
                 Vector(
-                    name=parts[1], data_type=parts[2],
+                    name=parts[1].decode('utf-8'),
+                    data_type=parts[2].decode('utf-8'),
                     data=np.zeros(self.current_plot.num_points, dtype="float64"),
                     is_complex=self.current_plot.is_complex
                 )
@@ -124,13 +125,8 @@ class Importer:
 
             point_num += 1
 
-        print(self.vectors)
         self.current_plot.x_axis = self.vectors[0]
         self.current_plot.vectors = self.vectors[1:]
-
-        print(self.current_plot.x_axis.data)
-        #print(self.current_plot.vectors[0].data)
-        #print(self.current_plot.x_axis.data.size, self.current_plot.vectors[0].data.size)
 
     def read_binary(self, f):
         raise NotImplementedError
