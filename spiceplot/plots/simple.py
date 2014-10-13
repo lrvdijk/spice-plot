@@ -106,3 +106,27 @@ class MultipleLinePlot(LinePlot):
 
         return figure
 
+class CombinedLinePlot(LinePlot):
+    def __init__(self, plot_datas, plot_func='plot', **kwargs):
+        LinePlot.__init__(self, plot_datas, plot_func, **kwargs)
+
+    def create_plot(self):
+        figure = plt.figure()
+        ax = figure.add_subplot(1, 1, 1)
+        ax.set_xlabel(self._x_label)
+        ax.set_ylabel(self._y_label)
+        ax.grid(which='both')
+
+        legend = []
+
+        for plot in self.plot_data:
+            self.generate_axis(ax, plot)
+
+            legend.extend([" - ".join([plot.title, vector.name])
+                for vector in plot.vectors])
+
+        box = ax.get_position()
+        ax.set_position([box.x0, box.y0, 0.7 * box.width, box.height])
+        ax.legend(legend, bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+        ax.grid(which='both')
+
